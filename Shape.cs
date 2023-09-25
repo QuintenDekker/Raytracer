@@ -24,4 +24,18 @@ namespace Raytracer
         }
 
     }
+
+    public class Plane : Shape
+    {
+        public Vector3 center;
+        public Vector3 normal;
+        public bool checkboard;
+
+        public Plane(Vector3 center, Vector3 normal, bool checkboard)
+        {
+            this.center = center;
+            this.normal = normal;
+            this.checkboard = checkboard;
+        }
+    }
 }

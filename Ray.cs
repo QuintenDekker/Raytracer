@@ -11,6 +11,8 @@ namespace Raytracer
     {
         public Vector3 origin;
         public Vector3 direction;
+        float maxT = 100;
+
         public Ray(Vector3 origin, Vector3 direction)
         {
             this.origin = origin;
@@ -23,6 +25,10 @@ namespace Raytracer
             {
                 Sphere sphere = (Sphere)shape;
                 return IntersectSphere(sphere);
+            } else if (shape is Plane)
+            {
+                Plane plane = (Plane)shape;
+                return IntersectPlane(plane);
             }
             return null;
         }
@@ -40,14 +46,30 @@ namespace Raytracer
                 double t1 = (-1 * b + Math.Sqrt(d)) / (2 * a);
                 double t2 = (-1 * b - Math.Sqrt(d)) / (2 * a);
 
-                double t = Math.Max(t1, t2);
+                double tfar = Math.Max(t1, t2);
+                double tnear = Math.Min(t1, t2);
 
-                if (t > 0)
+                if (tnear > 0)
                 {
-                    //MessageBox.Show("Intersection");
-                    return new Intersection(this, sphere, origin + (float)t * direction);
+                    return new Intersection(this, sphere, origin + (float)tnear * direction, (float)tnear);
+                } else if (tfar > 0)
+                {
+                    return new Intersection(this, sphere, origin + (float)tfar * direction, (float)tfar);
                 }
             }
+            return null!;
+        }
+
+        private Intersection IntersectPlane(Plane plane)
+        {
+            float t = (Vector3.Dot(plane.center - origin, plane.normal)) / Vector3.Dot(direction, plane.normal);
+
+            if (t >= 0 && t < maxT)
+            {
+                Vector3 intersectionPoint = origin + t * direction;
+                return new Intersection(this, plane, intersectionPoint, t);
+            }
+
             return null!;
         }
     }

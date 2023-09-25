@@ -7,18 +7,14 @@ using System.Threading.Tasks;
 
 namespace Raytracer
 {
-    internal class Intersection
+    internal class Light
     {
-        public Ray ray;
-        public Shape shape;
         public Vector3 position;
-        public float t;
-        public Intersection(Ray ray, Shape shape, Vector3 position, float t)
+        public float distance;
+        public Light(Vector3 position, float distance)
         {
-            this.ray = ray;
-            this.shape = shape;
             this.position = position;
-            this.t = t;
+            this.distance = distance;
         }
     }
 }
